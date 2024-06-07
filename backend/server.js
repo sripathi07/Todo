@@ -9,7 +9,7 @@ app.use(express.json());
 app.use(cors());
 
 // Connecting MongoDB
-mongoose.connect('mongodb://localhost:27017/mern-app')
+mongoose.connect('mongodb+srv://sripathi12:Sripathi12%40@cluster.gilror1.mongodb.net/todo')
     .then(() => {
         console.log('DB Connected!');
     })
