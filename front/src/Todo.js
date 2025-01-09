@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
+// Extend dayjs with plugins
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export default function Todo() {
     const [title, setTitle] = useState("");
@@ -16,7 +22,7 @@ export default function Todo() {
 
     const handleSubmit = () => {
         setError("");
-        const dateTime = dayjs().format("YYYY-MM-DD HH:mm:ss");
+        const dateTime = dayjs().tz("Asia/Kolkata").format("YYYY-MM-DD HH:mm:ss"); // Set timezone
         if (title.trim() !== "" && description.trim() !== "") {
             fetch(apiUrl + "/todos", {
                 method: "POST",
@@ -53,7 +59,12 @@ export default function Todo() {
         fetch(apiUrl + "/todos")
             .then((res) => res.json())
             .then((res) => {
-                setTodos(res);
+                setTodos(
+                    res.map((item) => ({
+                        ...item,
+                        dateTime: dayjs(item.dateTime).tz("Asia/Kolkata").format("YYYY-MM-DD HH:mm:ss"),
+                    }))
+                );
             });
     };
 
